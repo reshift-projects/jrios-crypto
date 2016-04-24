@@ -18,81 +18,6 @@ public class CryptoTest {
 
     private static final Logger log = Logger.getLogger(CryptoTest.class);
 
-    @Test
-    public void encrypt() {
-        try {
-            log.debug("==========================ENCRYPT TEST=========================");
-            Properties prop;
-            prop = ResourceHelper.findAsProperties("CipherOptions.properties");
-
-            Crypto crypt = CryptoFactory.getInstance(prop);
-            
-            crypt.encrypt(null);
-
-        } catch (Exception ex) {
-            log.error("Error General", ex);
-            fail("Error no experado");
-        }
-    }
-
-    @Test
-    public void decrypt() {
-        try {
-            log.debug("==========================DECRYPT TEST=========================");
-            Properties prop;
-            prop = ResourceHelper.findAsProperties("CipherOptions.properties");
-
-            Crypto crypt = CryptoFactory.getInstance(prop);
-            crypt.decrypt(null);
-
-        } catch (Exception ex) {
-            log.error("Error General", ex);
-            fail("Error no experado");
-        }
-    }
-
-    @Test
-    public void sign() {
-        try {
-            log.debug("==========================SIGN TEST=========================");
-            Properties prop;
-            boolean result;
-            prop = ResourceHelper.findAsProperties("CipherOptions.properties");
-
-            Crypto crypt = CryptoFactory.getInstance(prop);
-            result = (Boolean) crypt.sign(null);
-
-            log.info("Es valido?: " + result);
-            Assert.assertEquals(true, result);
-
-        } catch (Exception ex) {
-            log.error("Error General", ex);
-            fail("Error no experado");
-        }
-    }
-
-    @Test
-    public void verify() {
-        try {
-            log.debug("==========================VERIFY TEST=========================");
-            Properties prop;
-            boolean result;
-            prop = ResourceHelper.findAsProperties("CipherOptions.properties");
-
-            Crypto crypt = CryptoFactory.getInstance(prop);
-            
-            result = (Boolean) crypt.sign(null);
-            
-            result = crypt.verify(null);
-
-            log.info("Es valido?: " + result);
-            Assert.assertEquals(true, result);
-
-        } catch (Exception ex) {
-            log.error("Error General", ex);
-            fail("Error no experado");
-        }
-    }
 
     @Test
     public void encryptBytes() {
@@ -139,6 +64,30 @@ public class CryptoTest {
         }
     }
 
+
+    @Test
+    public void signBytes() {
+        try {
+            log.debug("==========================SIGN TEST=========================");
+            Properties prop;
+            boolean result;
+            prop = ResourceHelper.findAsProperties("CipherOptions_Bytes.properties");
+
+            Crypto crypt = CryptoFactory.getInstance(prop);
+            byte[] in = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConector.xml"));
+            
+            byte[] outExpected = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConector.crt"));
+            
+            byte[] out = (byte[])crypt.sign(in);
+
+            assertArrayEquals(outExpected, out);
+
+        } catch (Exception ex) {
+            log.error("Error General", ex);
+            fail("Error no experado");
+        }
+    }
+    
     @Test
     public void verifyBytes() {
         try {
@@ -149,12 +98,9 @@ public class CryptoTest {
 
             Crypto crypt = CryptoFactory.getInstance(prop);
                 
-            byte[] in = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConector.xml"));
-            crypt.sign(in);
-            
-            
-            in = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConectorDec.xml"));
-            result = crypt.verify(in);
+            byte[] in = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConectorDec.xml"));
+            byte[] out = Files.readAllBytes(Paths.get("D:/POCCrypt/WFConector.crt"));
+            result = crypt.verify(in, out);
 
             log.info("Es valido?: " + result);
             Assert.assertTrue(result);

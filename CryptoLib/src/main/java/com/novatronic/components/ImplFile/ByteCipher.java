@@ -26,16 +26,14 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
     
     
+    @Override
     public byte[] sign(byte[] in) throws CryptoException {
         
         try {
             log.debug("Iniciando cifrado de archivo segun properties");
             byte[] signOut;
-            FileOutputStream fos;
             FileSign signer;
-            CryptFile crypt;
             Key privateKey;
-            Key symmetricKey;
 
             //verificar datos
             validarDatos(ENC_PROPS);
@@ -50,7 +48,6 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
             //sign 
             signOut = signer.sign(in, (PrivateKey) privateKey);
             return signOut;
-
         } catch (Exception ex) {
             throw new CryptoException("Error al intentar cifrar arreglo bytes", ex);
         }
@@ -65,7 +62,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
         try {
             log.debug("Iniciando cifrado de bytes segun arreglo de bytes");
-            CryptFile crypt;
+            
             //leer llave simetrica de archivo
             algoritm = prop.getProperty("encAlg");
 
@@ -86,7 +83,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
         try {
             log.debug("Inciando descifrar archivo segun properties");
             Key symmetricKey;
-            CryptFile crypt;
+            
 
             //verificar datos
             validarDatos(DEC_PROPS);
@@ -104,7 +101,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
     }
 
     @Override
-    public boolean verify(byte[] in) throws CryptoException {
+    public boolean verify(byte[] in, byte[] out) throws CryptoException {
         boolean result = false;
         try {
             log.debug("Iniciando verificar firma de arreglo bytes");
@@ -119,11 +116,12 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
                     prop.getProperty("verKeystoreLoadPassword"));
 
             signer = new FileSign(prop.getProperty("verSignAlg"));
-            result = signer.verify(in, (PublicKey) publicKey, prop.getProperty("verSignFile"));
+            //result = signer.verify(in, (PublicKey) publicKey, prop.getProperty("verSignFile"));
+            result = signer.verify(in, (PublicKey) publicKey, out);
+            return result;
         } catch (Exception e) {
             throw new CryptoException("Error al intentar verificar firma de archivo", e);
         }
-        return result;
     }
 
 }

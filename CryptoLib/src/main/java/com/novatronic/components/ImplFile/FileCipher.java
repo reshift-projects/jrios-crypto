@@ -25,7 +25,7 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
     }
 
     @Override
-    public boolean verify(Object in) throws CryptoException {
+    public boolean verify(Object in, Boolean out) throws CryptoException {
         return verify();
     }
 

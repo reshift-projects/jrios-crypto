@@ -50,6 +50,6 @@ public interface Crypto<S,T> {
      * @return valor boolean que indica el resultado de la verificacion
      * @throws CryptoException
      */
-    public boolean verify(S in) throws CryptoException;
+    public boolean verify(S in, T out) throws CryptoException;
 
 }

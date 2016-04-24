@@ -24,14 +24,6 @@ public class FileSign {
         this.algorithm = algorithm;
     }
 
-    public String convertToHexa(byte[] bytes) {
-        StringBuilder sb = new StringBuilder("");
-        for (byte b : bytes) {
-            sb.append(String.format("%02X", b));
-        }
-        return sb.toString();
-    }
-
     public byte[] sign(byte[] data, PrivateKey prvKey) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         log.debug("Creando firma a partir de arreglo de bytes");
         ByteArrayInputStream fis = new ByteArrayInputStream(data);
@@ -57,17 +49,23 @@ public class FileSign {
         return sig.sign();
     }
 
-    public boolean verify(byte[] data, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
+    public boolean verify(byte[] data, PublicKey pubKey, byte[] sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         ByteArrayInputStream fis = new ByteArrayInputStream(data);
         return verify(fis, pubKey, sigbytes);
     }
     
     public boolean verify(String datafile, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         FileInputStream fis = new FileInputStream(datafile);
-        return verify(fis, pubKey, sigbytes);
+        FileInputStream fisOut = new FileInputStream(sigbytes);
+        File sigFile = new File(sigbytes);
+        FileInputStream fisign = new FileInputStream(sigFile);
+        byte[] sigBytes = new byte[(int) sigFile.length()];
+        fisign.read(sigBytes);
+        fisign.close();
+        return verify(fis, pubKey, sigBytes);
     }
     
-    public boolean verify(InputStream fis, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
+    public boolean verify(InputStream fis, PublicKey pubKey, byte[]  sigBytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         log.debug("Verificando firma");
         Signature sig = Signature.getInstance(algorithm);
         sig.initVerify(pubKey);
@@ -78,12 +76,6 @@ public class FileSign {
             nread = fis.read(dataBytes);
         };
         fis.close();
-
-        File sigFile = new File(sigbytes);
-        FileInputStream fisign = new FileInputStream(sigFile);
-        byte[] sigBytes = new byte[(int) sigFile.length()];
-        fisign.read(sigBytes);
-        fisign.close();
 
         return sig.verify(sigBytes);
     }
