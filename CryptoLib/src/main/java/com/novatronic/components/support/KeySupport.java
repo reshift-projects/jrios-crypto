@@ -15,12 +15,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.Key;
 import javax.crypto.spec.SecretKeySpec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author rcastillejo
  */
 public class KeySupport {
+
+    private static final Logger log = LoggerFactory.getLogger(KeySupport.class);
 
     public static byte[] serializeByte(Object obj) throws IOException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -63,7 +67,9 @@ public class KeySupport {
     }
 
     private static Key createSymmetricKey(byte[] symmetricKeyBytes, String algoritm) {
-        return new SecretKeySpec(symmetricKeyBytes, algoritm);
+        SecretKeySpec key = new SecretKeySpec(symmetricKeyBytes, algoritm);
+        log.trace("Obteniendo llave [{}]", new String(key.getEncoded()));
+        return key;
     }
 
 }

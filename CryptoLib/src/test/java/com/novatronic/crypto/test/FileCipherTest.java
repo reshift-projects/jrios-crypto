@@ -33,6 +33,18 @@ public class FileCipherTest {
     }
 
     @Test
+    public void encryptDES() {
+            log.debug("==========================ENCRYPT TEST=========================");
+            Properties prop;
+            prop = ResourceHelper.findAsProperties("CipherOptions_DES.properties");
+
+            Crypto crypt = CryptoFactory.getInstance(prop);
+
+            crypt.encrypt(null);
+ 
+    }
+
+    @Test
     public void decrypt() {
         try {
             log.debug("==========================DECRYPT TEST=========================");

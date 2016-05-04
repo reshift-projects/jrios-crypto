@@ -16,11 +16,11 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
     private static final Logger log = LoggerFactory.getLogger(ByteCipher.class);
 
-    private static final String[] ENC_PROPS = {"encKeyFile", "encSignKeyFile", "encSignAlg",
-        "encAlg", "encSignKeyAlias", "encKeystoreLoadPassword", "encPrivatePassword"};
+    private static final String[] ENC_PROPS = {"encKeyFile", "encSignAlg"};
     private static final String[] DEC_PROPS = {"decKeyFile", "decAlg"};
-    private static final String[] VER_PROPS = {"verSignFile", "verSignKeyFile", "verSignKeyAlias", "verKeystoreLoadPassword", "verSignAlg"};
-
+    private static final String[] SIG_PROPS = {"encSignKeyFile", "encSignAlg", "encSignKeyAlias", "encKeystoreLoadPassword", "encPrivatePassword"};
+    private static final String[] VER_PROPS = {"verSignKeyFile", "verSignAlg", "verSignKeyAlias", "verKeystoreLoadPassword"};
+    
     public ByteCipher() {
     }
 
@@ -36,7 +36,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
             Key privateKey;
 
             //verificar datos
-            validarDatos(ENC_PROPS);
+            validarDatos(SIG_PROPS);
             signer = new FileSign(prop.getProperty("encSignAlg"));
 
             //Leer llave privada de archivo
@@ -62,6 +62,9 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
         try {
             log.debug("Iniciando cifrado de bytes segun arreglo de bytes");
+            
+            //verificar datos
+            validarDatos(ENC_PROPS);
             
             //leer llave simetrica de archivo
             algoritm = prop.getProperty("encAlg");

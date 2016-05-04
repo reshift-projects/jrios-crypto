@@ -1,7 +1,5 @@
 package com.novatronic.components.ImplFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,10 +9,12 @@ import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import javax.crypto.BadPaddingException;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.slf4j.Logger;
@@ -36,18 +36,11 @@ public class CryptFile {
         cipher = Cipher.getInstance(this.algorithm);
     }
 
-    public byte[] encrypt(byte[] in) throws IOException, InvalidKeyException {
+    public byte[] encrypt(byte[] in) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         log.debug("Cifrando arreglo bytes {}", in.length);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 
-        ByteArrayInputStream is = new ByteArrayInputStream(in);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CipherOutputStream os = new CipherOutputStream(baos, cipher);
-
-        copyAndClose(is, os);
-
-        return baos.toByteArray();
+        return cipher.doFinal(in);
     }
 
     public void encrypt(File in, File out) throws IOException, InvalidKeyException {
@@ -60,15 +53,11 @@ public class CryptFile {
         copyAndClose(is, os);
     }
 
-    public byte[] decrypt(byte[] in) throws IOException, InvalidKeyException {
+    public byte[] decrypt(byte[] in) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         log.debug("Descifrando arreglo bytes {}", in.length);
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
 
-        CipherInputStream is = new CipherInputStream(new ByteArrayInputStream(in), cipher);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        copyAndClose(is, os);
-
-        return os.toByteArray();
+        return cipher.doFinal(in);
     }
 
     public void decrypt(File in, File out) throws IOException, InvalidKeyException {
