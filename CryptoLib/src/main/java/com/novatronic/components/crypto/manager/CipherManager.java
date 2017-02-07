@@ -1,4 +1,4 @@
-package com.novatronic.components.ImplFile;
+package com.novatronic.components.crypto.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,31 +20,29 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CryptFile {
+public class CipherManager {
 
-    private static final Logger log = LoggerFactory.getLogger(CryptFile.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CipherManager.class);
 
-    private String algorithm = "AES";
-    private Cipher cipher;
-    private SecretKeySpec keySpec;
+    private final Cipher cipher;
+    private final SecretKeySpec keySpec;
 
-    public CryptFile(String algorithm, Key secKey) throws GeneralSecurityException {
+    public CipherManager(String algorithm, Key secKey) throws GeneralSecurityException {
         // instancia cipher
-        this.algorithm = algorithm;
         this.keySpec = (SecretKeySpec) secKey;
 
-        cipher = Cipher.getInstance(this.algorithm);
+        this.cipher = Cipher.getInstance(algorithm);
     }
 
     public byte[] encrypt(byte[] in) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        log.debug("Cifrando arreglo bytes {}", in.length);
+        LOGGER.debug("Cifrando arreglo bytes {}", in.length);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 
         return cipher.doFinal(in);
     }
 
     public void encrypt(File in, File out) throws IOException, InvalidKeyException {
-        log.debug("Cifrando archivo {}", in.getName());
+        LOGGER.debug("Cifrando archivo {}", in.getName());
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 
         FileInputStream is = new FileInputStream(in);
@@ -54,14 +52,14 @@ public class CryptFile {
     }
 
     public byte[] decrypt(byte[] in) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        log.debug("Descifrando arreglo bytes {}", in.length);
+        LOGGER.debug("Descifrando arreglo bytes {}", in.length);
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
 
         return cipher.doFinal(in);
     }
 
     public void decrypt(File in, File out) throws IOException, InvalidKeyException {
-        log.debug("Descifrando archivo {}", in.getName());
+        LOGGER.debug("Descifrando archivo {}", in.getName());
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
 
         CipherInputStream is = new CipherInputStream(new FileInputStream(in), cipher);

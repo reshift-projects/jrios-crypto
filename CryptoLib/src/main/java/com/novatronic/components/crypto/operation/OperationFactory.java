@@ -6,8 +6,8 @@
 package com.novatronic.components.crypto.operation;
 
 import com.novatronic.components.crypto.Crypto;
-import com.novatronic.components.crypto.CryptoDTO;
-import com.novatronic.components.crypto.CryptoResponseDTO;
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import com.novatronic.components.exceptions.CryptoException;
 
 /**
@@ -16,7 +16,7 @@ import com.novatronic.components.exceptions.CryptoException;
  */
 public class OperationFactory {
 
-    public static CryptoResponseDTO executeOperation(Crypto crypto, CryptoDTO request) {
+    public static Response executeOperation(Crypto crypto, Request request) {
         BasicOperation operation = getOperation(request.getOperacion());
         return operation.execute(crypto, request);
     }

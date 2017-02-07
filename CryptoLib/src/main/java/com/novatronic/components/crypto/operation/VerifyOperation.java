@@ -6,8 +6,8 @@
 package com.novatronic.components.crypto.operation;
 
 import com.novatronic.components.crypto.Crypto;
-import com.novatronic.components.crypto.CryptoDTO;
-import com.novatronic.components.crypto.CryptoResponseDTO;
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import com.novatronic.components.exceptions.CryptoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +21,13 @@ public class VerifyOperation extends BasicOperation {
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyOperation.class);
 
     @Override
-    protected CryptoResponseDTO customExecute(Crypto crypto, CryptoDTO data) {
+    protected Response customExecute(Crypto crypto, Request data) {
         boolean verifyError = !crypto.verify(data.getData(), data.getDataToVerified());
         if (verifyError) {
             throw new CryptoException(CryptoException.VERIFICAR, "Error al verificar");
         }
         LOGGER.debug("Firma del Mensaje Verificado Satisfactoriamente");
-        return new CryptoResponseDTO();
+        return new Response();
     }
 
 }

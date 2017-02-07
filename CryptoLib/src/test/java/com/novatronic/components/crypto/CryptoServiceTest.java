@@ -5,11 +5,10 @@
  */
 package com.novatronic.components.crypto;
 
-import com.novatronic.components.exceptions.CryptoException;
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import com.novatronic.components.support.ResourceHelper;
 import org.apache.log4j.Logger;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -56,11 +55,11 @@ public class CryptoServiceTest {
     @Test
     public void testProcessEncription() {
         System.out.println("process");
-        CryptoDTO request;
+        Request request;
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "AES", "Hola Mundo".getBytes());
+        request = new Request(CryptoType.SYMETRIC, "E", "AES", "Hola Mundo".getBytes());
 
-        CryptoResponseDTO result = instance.process(request);
+        Response result = instance.process(request);
         LOGGER.debug("resultado=" + result);
 
         assertTrue(result.getCodigoRespuesta().equals("00"));
@@ -69,17 +68,17 @@ public class CryptoServiceTest {
     @Test
     public void testProcessDecription() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataAEncriptar;
 
         dataAEncriptar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "AES", dataAEncriptar);
+        request = new Request(CryptoType.SYMETRIC, "E", "AES", dataAEncriptar);
 
         result = instance.process(request);
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "D", "AES", result.getDataRespuesta());
+        request = new Request(CryptoType.SYMETRIC, "D", "AES", result.getDataRespuesta());
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);
@@ -91,13 +90,13 @@ public class CryptoServiceTest {
     @Test
     public void testProcessSign() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataACifrar;
 
         dataACifrar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "F", "SHA1withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", dataACifrar);
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);
@@ -109,16 +108,16 @@ public class CryptoServiceTest {
     @Test
     public void testProcessVerify() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataACifrar;
 
         dataACifrar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "F", "SHA1withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", dataACifrar);
         result = instance.process(request);
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "V", "SHA1withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "V", "SHA1withRSA", dataACifrar);
         request.setDataToVerified(result.getDataRespuesta());
         result = instance.process(request);
 
@@ -130,11 +129,11 @@ public class CryptoServiceTest {
     @Test
     public void testAlgoritmoInvalido() {
         System.out.println("process");
-        CryptoDTO request;
+        Request request;
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "ABC", "A".getBytes());
+        request = new Request(CryptoType.SYMETRIC, "E", "ABC", "A".getBytes());
 
-        CryptoResponseDTO result = instance.process(request);
+        Response result = instance.process(request);
         LOGGER.debug("resultado=" + result);
 
         assertTrue(result.getCodigoRespuesta().equals("01"));
@@ -144,11 +143,11 @@ public class CryptoServiceTest {
     @Test
     public void testOperacionInvalida() {
         System.out.println("process");
-        CryptoDTO request;
+        Request request;
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "F", "AES", "A".getBytes());
+        request = new Request(CryptoType.SYMETRIC, "F", "AES", "A".getBytes());
 
-        CryptoResponseDTO result = instance.process(request);
+        Response result = instance.process(request);
         LOGGER.debug("resultado=" + result);
 
         assertTrue(result.getCodigoRespuesta().equals("02"));
@@ -158,11 +157,11 @@ public class CryptoServiceTest {
     @Test
     public void testMensajeNoExiste() {
         System.out.println("process");
-        CryptoDTO request;
+        Request request;
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "AES", null);
+        request = new Request(CryptoType.SYMETRIC, "E", "AES", null);
 
-        CryptoResponseDTO result = instance.process(request);
+        Response result = instance.process(request);
         LOGGER.debug("resultado=" + result);
 
         assertTrue(result.getCodigoRespuesta().equals("03"));
@@ -180,9 +179,9 @@ public class CryptoServiceTest {
     @Test
     public void testConfiguracionInvalidaCifrar() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "AES", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.SYMETRIC, "E", "AES", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
@@ -195,9 +194,9 @@ public class CryptoServiceTest {
     @Test
     public void testConfiguracionInvalidaDesCifrar() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
@@ -210,9 +209,9 @@ public class CryptoServiceTest {
     @Test
     public void testConfiguracionInvalidaFirmar() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
@@ -225,9 +224,9 @@ public class CryptoServiceTest {
     @Test
     public void testConfiguracionInvalidaVerificar() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
@@ -240,9 +239,9 @@ public class CryptoServiceTest {
     @Test
     public void testNoExisteLlaveSimetrica() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
@@ -255,9 +254,9 @@ public class CryptoServiceTest {
     @Test
     public void testNoExisteLlavePrivada() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
@@ -270,9 +269,9 @@ public class CryptoServiceTest {
     @Test
     public void testNoExisteLlavePublica() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
 
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
@@ -285,9 +284,9 @@ public class CryptoServiceTest {
     @Test
     public void testErrorCifrarAlgoritmo() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
-        request = new CryptoDTO(CryptoType.SYMETRIC, "E", "DES", "Hola Mundo".getBytes());
+        Request request;
+        Response result;
+        request = new Request(CryptoType.SYMETRIC, "E", "DES", "Hola Mundo".getBytes());
 
         result = instance.process(request);
         LOGGER.debug("resultado=" + result);
@@ -299,10 +298,10 @@ public class CryptoServiceTest {
     @Test
     public void testErrorDesCifrarAlgoritmo() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
 
-        request = new CryptoDTO(CryptoType.SYMETRIC, "D", "DES", "Hola Mundo".getBytes());
+        request = new Request(CryptoType.SYMETRIC, "D", "DES", "Hola Mundo".getBytes());
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);
@@ -314,13 +313,13 @@ public class CryptoServiceTest {
     @Test
     public void testErrorFirmarAlgoritmo() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataACifrar;
 
         dataACifrar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "F", "RIPEMD256withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "F", "RIPEMD256withRSA", dataACifrar);
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);
@@ -332,13 +331,13 @@ public class CryptoServiceTest {
     @Test
     public void testErrorVerificarFirmaAlgoritmo() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataACifrar;
 
         dataACifrar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "V", "RIPEMD256withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "V", "RIPEMD256withRSA", dataACifrar);
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);
@@ -350,13 +349,13 @@ public class CryptoServiceTest {
     @Test
     public void testErrorSistema() {
         System.out.println("process");
-        CryptoDTO request;
-        CryptoResponseDTO result;
+        Request request;
+        Response result;
         byte[] dataACifrar;
 
         dataACifrar = "Hola Mundo".getBytes();
 
-        request = new CryptoDTO(CryptoType.ASYMETRIC, "V", "RIPEMD256withRSA", dataACifrar);
+        request = new Request(CryptoType.ASYMETRIC, "V", "RIPEMD256withRSA", dataACifrar);
         CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigNoExisteImpl.properties"));
         result = instance.process(request);
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.novatronic.components.crypto;
+package com.novatronic.components.crypto.message;
 
 import java.util.Arrays;
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author Ricardo
  */
-public class CryptoResponseDTO {
+public class Response {
 
     private byte[] dataRespuesta;
     private String codigoRespuesta;

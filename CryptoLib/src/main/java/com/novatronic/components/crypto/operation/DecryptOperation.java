@@ -6,8 +6,8 @@
 package com.novatronic.components.crypto.operation;
 
 import com.novatronic.components.crypto.Crypto;
-import com.novatronic.components.crypto.CryptoDTO;
-import com.novatronic.components.crypto.CryptoResponseDTO;
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +20,9 @@ public class DecryptOperation extends BasicOperation {
     private static final Logger LOGGER = LoggerFactory.getLogger(DecryptOperation.class);
 
     @Override
-    public CryptoResponseDTO customExecute(Crypto crypto, CryptoDTO data) {
+    public Response customExecute(Crypto crypto, Request data) {
         byte[] responseData;
-        CryptoResponseDTO response = new CryptoResponseDTO();
+        Response response = new Response();
 
         responseData = (byte[]) crypto.decrypt(data.getData());
 

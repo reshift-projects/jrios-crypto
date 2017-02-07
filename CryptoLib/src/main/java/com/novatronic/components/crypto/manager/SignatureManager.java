@@ -1,4 +1,4 @@
-package com.novatronic.components.ImplFile;
+package com.novatronic.components.crypto.manager;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,14 +14,14 @@ import java.security.SignatureException;
 
 import org.apache.log4j.Logger;
 
-public class FileSign {
+public class SignatureManager {
 
-    private static final Logger log = Logger.getLogger(FileSign.class);
+    private static final Logger log = Logger.getLogger(SignatureManager.class);
 
-    private String algorithm = "SHA1withRSA";
+    private final Signature signature;
 
-    public FileSign(String algorithm) {
-        this.algorithm = algorithm;
+    public SignatureManager(String algorithm) throws NoSuchAlgorithmException {
+        this.signature = Signature.getInstance(algorithm);
     }
 
     public byte[] sign(byte[] data, PrivateKey prvKey) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
@@ -37,15 +37,15 @@ public class FileSign {
     }
 
     public byte[] sign(InputStream fis, PrivateKey prvKey) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
-        Signature sig = cargarAlgoritmoFirma(algorithm, prvKey);
+        cargarAlgoritmoFirma(prvKey);
         byte[] dataBytes = new byte[1024];
         int nread = fis.read(dataBytes);
         while (nread > 0) {
-            sig.update(dataBytes, 0, nread);
+            signature.update(dataBytes, 0, nread);
             nread = fis.read(dataBytes);
         }
         fis.close();
-        return sig.sign();
+        return signature.sign();
     }
 
     public boolean verify(byte[] data, PublicKey pubKey, byte[] sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
@@ -66,29 +66,25 @@ public class FileSign {
 
     public boolean verify(InputStream fis, PublicKey pubKey, byte[] sigBytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         log.debug("Verificando firma");
-        Signature sig = cargarAlgoritmoFirma(algorithm, pubKey);
-        
+        cargarAlgoritmoFirma(pubKey);
+
         byte[] dataBytes = new byte[1024];
         int nread = fis.read(dataBytes);
         while (nread > 0) {
-            sig.update(dataBytes, 0, nread);
+            signature.update(dataBytes, 0, nread);
             nread = fis.read(dataBytes);
         }
         fis.close();
 
-        return sig.verify(sigBytes);
+        return signature.verify(sigBytes);
     }
 
-    private Signature cargarAlgoritmoFirma(String algoritmo, PublicKey pubKey) throws NoSuchAlgorithmException, InvalidKeyException {
-        Signature sig = Signature.getInstance(algoritmo);
-        sig.initVerify(pubKey);
-        return sig;
+    private void cargarAlgoritmoFirma(PublicKey pubKey) throws NoSuchAlgorithmException, InvalidKeyException {
+        signature.initVerify(pubKey);
     }
 
-    private Signature cargarAlgoritmoFirma(String algoritmo, PrivateKey privKey) throws NoSuchAlgorithmException, InvalidKeyException {
-        Signature sig = Signature.getInstance(algoritmo);
-        sig.initSign(privKey);
-        return sig;
+    private void cargarAlgoritmoFirma(PrivateKey privKey) throws NoSuchAlgorithmException, InvalidKeyException {
+        signature.initSign(privKey);
     }
 
 }

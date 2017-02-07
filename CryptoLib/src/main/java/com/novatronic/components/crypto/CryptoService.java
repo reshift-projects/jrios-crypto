@@ -5,6 +5,8 @@
  */
 package com.novatronic.components.crypto;
 
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import com.novatronic.components.crypto.operation.OperationFactory;
 import com.novatronic.components.exceptions.CryptoException;
 import com.novatronic.components.support.ResourceHelper;
@@ -29,9 +31,9 @@ public class CryptoService {
         this.configuration = configuration;
     }
 
-    public CryptoResponseDTO process(CryptoDTO request) {
+    public Response process(Request request) {
         Crypto crypto;
-        CryptoResponseDTO response;
+        Response response;
         Properties config;
 
         try {
@@ -47,12 +49,12 @@ public class CryptoService {
             LOGGER.info("Respuesta obtenida [" + response.getCodigoRespuesta() + "]");
 
         } catch (CryptoException e) {
-            response = new CryptoResponseDTO();
+            response = new Response();
             response.setCodigoRespuesta(e.getCodigo());
             response.setDescripcionRespuesta(e.getMessage());
             LOGGER.error("Respuesta con error identificado [" + response.getCodigoRespuesta() + "=" + response.getDescripcionRespuesta() + "]", e);
         } catch (Exception e) {
-            response = new CryptoResponseDTO();
+            response = new Response();
             response.setCodigoRespuesta(CryptoException.GENERAL);
             response.setDescripcionRespuesta("Error en el sistema");
             LOGGER.error("Respuesta con error [" + response.getCodigoRespuesta() + "=" + response.getDescripcionRespuesta() + "]", e);
@@ -61,7 +63,7 @@ public class CryptoService {
         return response;
     }
 
-    private Properties getConfiguration(CryptoDTO request) {
+    private Properties getConfiguration(Request request) {
         Properties config = new Properties();
         config.putAll(configuration);
 

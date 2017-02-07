@@ -6,8 +6,8 @@
 package com.novatronic.components.crypto.operation;
 
 import com.novatronic.components.crypto.Crypto;
-import com.novatronic.components.crypto.CryptoDTO;
-import com.novatronic.components.crypto.CryptoResponseDTO;
+import com.novatronic.components.crypto.message.Request;
+import com.novatronic.components.crypto.message.Response;
 import com.novatronic.components.exceptions.CryptoException;
 
 /**
@@ -18,8 +18,8 @@ public abstract class BasicOperation {
 
     private final String SUCCESS = "00";
 
-    public CryptoResponseDTO execute(Crypto crypto, CryptoDTO request) throws CryptoException {
-        CryptoResponseDTO response;
+    public Response execute(Crypto crypto, Request request) throws CryptoException {
+        Response response;
 
         response = customExecute(crypto, request);
 
@@ -28,5 +28,5 @@ public abstract class BasicOperation {
         return response;
     }
 
-    protected abstract CryptoResponseDTO customExecute(Crypto crypto, CryptoDTO data);
+    protected abstract Response customExecute(Crypto crypto, Request data);
 }

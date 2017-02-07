@@ -1,5 +1,8 @@
 package com.novatronic.components.ImplFile;
 
+import com.novatronic.components.crypto.manager.SignatureManager;
+import com.novatronic.components.crypto.manager.CipherManager;
+import com.novatronic.components.crypto.key.KeyManager;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -8,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.novatronic.components.exceptions.CryptoException;
-import com.novatronic.components.support.CryptFileSupport;
-import com.novatronic.components.support.KeySupport;
 
 public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
@@ -28,21 +29,21 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
         LOGGER.debug("Iniciando cifrado de archivo segun properties");
         byte[] signOut;
-        FileSign signer;
+        SignatureManager signer;
         Key privateKey;
 
         //verificar datos
         validarDatos(SIG_PROPS);
-        signer = new FileSign(prop.getProperty("encSignAlg"));
 
         //Leer llave privada de archivo
-        privateKey = getPrivateKey(prop.getProperty("encSignKeyFile"),
+        privateKey = KeyManager.getPrivateKey(prop.getProperty("encSignKeyFile"),
                 prop.getProperty("encSignKeyAlias"),
                 prop.getProperty("encKeystoreLoadPassword"),
                 prop.getProperty("encPrivatePassword"));
 
         try {
             //sign 
+            signer = new SignatureManager(prop.getProperty("encSignAlg"));
             signOut = signer.sign(in, (PrivateKey) privateKey);
             return signOut;
         } catch (Exception ex) {
@@ -52,6 +53,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
     @Override
     public byte[] encrypt(byte[] in) throws CryptoException {
+        CipherManager encrypter;
         Key symmetricKey;
         String algoritm;
         byte[] out;
@@ -63,11 +65,12 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
         //leer llave simetrica de archivo
         algoritm = prop.getProperty("encAlg");
-        symmetricKey = KeySupport.getSymmetricKey(prop.getProperty("encKeyFile"), algoritm);
+        symmetricKey = KeyManager.getSymmetricKey(prop.getProperty("encKeyFile"), algoritm);
 
         try {
             //cifrar con filein, fileout, algoritmo, llave		
-            out = CryptFileSupport.encryptBytes(algoritm, symmetricKey, in);
+            encrypter = new CipherManager(algoritm, symmetricKey);            
+            out = encrypter.encrypt(in);
             return out;
         } catch (Exception ex) {
             throw new CryptoException(CryptoException.CIFRAR, "Error al cifrar el mensaje", ex);
@@ -76,6 +79,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
 
     @Override
     public byte[] decrypt(byte[] in) throws CryptoException {
+        CipherManager encrypter;
         String algoritm;
         byte[] out;
         LOGGER.debug("Inciando descifrar archivo segun properties");
@@ -86,11 +90,12 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
         //leer llave simetrica de archivo
         algoritm = prop.getProperty("decAlg");
 
-        symmetricKey = KeySupport.getSymmetricKey(prop.getProperty("decKeyFile"), algoritm);
+        symmetricKey = KeyManager.getSymmetricKey(prop.getProperty("decKeyFile"), algoritm);
 
         try {
             //descifrar file
-            out = CryptFileSupport.decryptBytes(algoritm, symmetricKey, in);
+            encrypter = new CipherManager(algoritm, symmetricKey);            
+            out = encrypter.decrypt(in);
             return out;
         } catch (Exception ex) {
             throw new CryptoException(CryptoException.DESCRIFRAR, "Error al descifrar el mensaje", ex);
@@ -100,7 +105,7 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
     @Override
     public boolean verify(byte[] in, byte[] out) throws CryptoException {
         boolean result = false;
-        FileSign signer;
+        SignatureManager signer;
         Key publicKey;
 
         LOGGER.debug("Iniciando verificar firma de arreglo bytes");
@@ -108,12 +113,12 @@ public class ByteCipher extends BasicCipher<byte[], byte[]> {
         //verificar datos
         validarDatos(VER_PROPS);
         //Leer llave publica de archivo
-        publicKey = getPublicKey(prop.getProperty("verSignKeyFile"),
+        publicKey = KeyManager.getPublicKey(prop.getProperty("verSignKeyFile"),
                 prop.getProperty("verSignKeyAlias"),
                 prop.getProperty("verKeystoreLoadPassword"));
 
         try {
-            signer = new FileSign(prop.getProperty("verSignAlg"));
+            signer = new SignatureManager(prop.getProperty("verSignAlg"));
             result = signer.verify(in, (PublicKey) publicKey, out);
             return result;
         } catch (Exception e) {

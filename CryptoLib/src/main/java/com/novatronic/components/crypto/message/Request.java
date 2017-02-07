@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.novatronic.components.crypto;
+package com.novatronic.components.crypto.message;
 
+import com.novatronic.components.crypto.CryptoType;
 import com.novatronic.components.crypto.operation.CipherOperation;
 import com.novatronic.components.exceptions.CryptoException;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import java.util.Arrays;
  *
  * @author Ricardo
  */
-public class CryptoDTO {
+public class Request {
 
     private CryptoType type;
     private CipherOperation operacion;
@@ -21,11 +22,11 @@ public class CryptoDTO {
     private byte[] data;
     private byte[] dataToVerified;
 
-    public CryptoDTO(CryptoType type, String operacion, String algoritmo, byte[] data) {
+    public Request(CryptoType type, String operacion, String algoritmo, byte[] data) {
         this(type, CipherOperation.get(operacion), algoritmo, data);
     }
 
-    public CryptoDTO(CryptoType type, CipherOperation operacion, String algoritmo, byte[] data) {
+    public Request(CryptoType type, CipherOperation operacion, String algoritmo, byte[] data) {
         this.type = type;
         this.operacion = operacion;
         this.algoritmo = algoritmo;
