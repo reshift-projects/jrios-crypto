@@ -31,7 +31,7 @@ public abstract class BasicCipher<S, T> implements Crypto<S, T> {
     protected void validarDatos(String[] enc_props) {
         for (String value : enc_props) {
             if (!(prop.containsKey(value) && !prop.get(value).equals(""))) {
-                throw new ParametersCryptoException("No se tienen suficientes valores para la accion");
+                throw new ParametersCryptoException("No se tienen suficientes valores para la operacion");
             }
         }
     }
@@ -52,7 +52,7 @@ public abstract class BasicCipher<S, T> implements Crypto<S, T> {
             // llave Privada
             privateKey = (PrivateKey) ks.getKey(alias, privatePassword.toCharArray());
         } catch (Exception ex) {
-            throw new CryptoException("Error al obtener clave privada", ex);
+            throw new CryptoException(CryptoException.OBTENER_LLAVE_PRIVADA, "Error al obtener llave privada", ex);
         }
         return privateKey;
     }
@@ -74,7 +74,7 @@ public abstract class BasicCipher<S, T> implements Crypto<S, T> {
             cert = ks.getCertificate(signKeyAlias);
             publicKey = cert.getPublicKey();
         } catch (Exception ex) {
-            throw new CryptoException("Error al obtener clave publica", ex);
+            throw new CryptoException(CryptoException.OBTENER_LLAVE_PUBLICA, "Error al obtener llave publica", ex);
         }
 
         return publicKey;

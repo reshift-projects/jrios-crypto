@@ -14,12 +14,12 @@ import com.novatronic.components.support.KeySupport;
 
 public class FileCipher extends BasicCipher<Object, Boolean> {
 
-    private static final Logger log = LoggerFactory.getLogger(FileCipher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileCipher.class);
 
-    private String[] ENC_PROPS = {"encFileIn", "encFileOut", "encSignFileOut", "encKeyFile", "encSignKeyFile", "encSignAlg",
+    private final String[] ENC_PROPS = {"encFileIn", "encFileOut", "encSignFileOut", "encKeyFile", "encSignKeyFile", "encSignAlg",
         "encAlg", "encSignKeyAlias", "encKeystoreLoadPassword", "encPrivatePassword"};
-    private String[] DEC_PROPS = {"decFileIn", "decFileOut", "decKeyFile", "decAlg"};
-    private String[] VER_PROPS = {"verFileIn", "verSignFile", "verSignKeyFile", "verSignKeyAlias", "verKeystoreLoadPassword", "verSignAlg"};
+    private final String[] DEC_PROPS = {"decFileIn", "decFileOut", "decKeyFile", "decAlg"};
+    private final String[] VER_PROPS = {"verFileIn", "verSignFile", "verSignKeyFile", "verSignKeyAlias", "verKeystoreLoadPassword", "verSignAlg"};
 
     public FileCipher() {
     }
@@ -50,7 +50,7 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
     public boolean verify() {
         boolean result = false;
         try {
-            log.debug("Iniciando verificar firma de archivo");
+            LOGGER.debug("Iniciando verificar firma de archivo");
 
             FileSign signer;
             Key publicKey;
@@ -72,7 +72,7 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
     public void decrypt() {
         String algoritm;
         try {
-            log.debug("Inciando descifrar archivo segun properties");
+            LOGGER.debug("Inciando descifrar archivo segun properties");
             Key symmetricKey;
             CryptFile crypt;
 
@@ -94,7 +94,7 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
     public void sign() {
 
         try {
-            log.debug("Iniciando cifrado de archivo segun properties");
+            LOGGER.debug("Iniciando cifrado de archivo segun properties");
             byte[] signOut;
             FileOutputStream fos;
             FileSign signer;
@@ -129,7 +129,7 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
     public void encrypt() {
         String algoritm;
         try {
-            log.debug("Iniciando cifrado de archivo segun properties");
+            LOGGER.debug("Iniciando cifrado de archivo segun properties");
             byte[] signOut;
             FileOutputStream fos;
             //FileSign signer;

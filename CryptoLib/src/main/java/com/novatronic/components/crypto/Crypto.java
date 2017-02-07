@@ -4,14 +4,10 @@ import java.util.Properties;
 
 import com.novatronic.components.exceptions.CryptoException;
 
-public interface Crypto<S,T> {
+public interface Crypto<S, T> {
 
-    public enum CryptoMode {
-        ENCRYPT, DECRYPT, VERIFY, SIGN
-    }
-    
     public void config(Properties prop);
-    
+
     /**
      * Metodo que firma flujo de bytes con las llaves cargadas en el metodo
      * config

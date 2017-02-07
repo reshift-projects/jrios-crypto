@@ -5,19 +5,17 @@
  */
 package com.novatronic.components.crypto;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Ricardo
  */
-public class CryptoResponseDTO extends  CryptoDTO{
-    
+public class CryptoResponseDTO {
+
     private byte[] dataRespuesta;
     private String codigoRespuesta;
     private String descripcionRespuesta;
-
-    public CryptoResponseDTO(CryptoDTO request) {
-        super(request.getType(), request.getOperacion(), request.getAlgoritmo(), request.getData());
-    }
 
     public byte[] getDataRespuesta() {
         return dataRespuesta;
@@ -26,7 +24,7 @@ public class CryptoResponseDTO extends  CryptoDTO{
     public void setDataRespuesta(byte[] dataRespuesta) {
         this.dataRespuesta = dataRespuesta;
     }
-    
+
     public String getCodigoRespuesta() {
         return codigoRespuesta;
     }
@@ -45,10 +43,7 @@ public class CryptoResponseDTO extends  CryptoDTO{
 
     @Override
     public String toString() {
-        return "CryptoResponseDTO{" + "dataRespuesta=" + dataRespuesta + ", codigoRespuesta=" + codigoRespuesta + ", descripcionRespuesta=" + descripcionRespuesta + '}';
+        return "CryptoResponseDTO{" + "dataRespuesta=" + Arrays.toString(dataRespuesta) + ", codigoRespuesta=" + codigoRespuesta + ", descripcionRespuesta=" + descripcionRespuesta + '}';
     }
-    
-    
 
-    
 }

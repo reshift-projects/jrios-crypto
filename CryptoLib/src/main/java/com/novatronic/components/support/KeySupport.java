@@ -58,11 +58,11 @@ public class KeySupport {
 
             fis.read(encoded);
             fis.close();
-
-            return createSymmetricKey(encoded, algoritm);
         } catch (Exception ex) {
-            throw new CryptoException("Error al obtener clave", ex);
+            throw new CryptoException(CryptoException.OBTENER_LLAVE_SIMETRICA, "Error al obtener llave simetrica", ex);
         }
+
+        return createSymmetricKey(encoded, algoritm);
 
     }
 

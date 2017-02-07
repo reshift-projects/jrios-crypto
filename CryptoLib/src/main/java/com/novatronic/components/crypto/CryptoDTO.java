@@ -5,24 +5,47 @@
  */
 package com.novatronic.components.crypto;
 
-import com.novatronic.components.support.CipherType;
+import com.novatronic.components.crypto.operation.CipherOperation;
+import com.novatronic.components.exceptions.CryptoException;
+import java.util.Arrays;
 
 /**
  *
  * @author Ricardo
  */
 public class CryptoDTO {
-    private CipherType type;
-    private String operacion;
+
+    private CryptoType type;
+    private CipherOperation operacion;
     private String algoritmo;
     private byte[] data;
     private byte[] dataToVerified;
 
-    public CryptoDTO(CipherType type, String operacion, String algoritmo, byte[] data) {
+    public CryptoDTO(CryptoType type, String operacion, String algoritmo, byte[] data) {
+        this(type, CipherOperation.get(operacion), algoritmo, data);
+    }
+
+    public CryptoDTO(CryptoType type, CipherOperation operacion, String algoritmo, byte[] data) {
         this.type = type;
         this.operacion = operacion;
         this.algoritmo = algoritmo;
         this.data = data;
+    }
+
+    public void validar() {
+        validarTipoCifrado();
+        validarData();
+    }
+
+    private void validarTipoCifrado() {
+        type.validarAlgoritmo(algoritmo);
+        type.validarOperacion(operacion);
+    }
+
+    private void validarData() {
+        if (data == null || data.length == 0) {
+            throw new CryptoException(CryptoException.MENSAJE_NO_EXISTE, "Contenido del mensaje no existe");
+        }
     }
 
     public byte[] getDataToVerified() {
@@ -33,21 +56,19 @@ public class CryptoDTO {
         this.dataToVerified = dataToVerified;
     }
 
-    public String getOperacion() {
+    public CipherOperation getOperacion() {
         return operacion;
     }
 
     public void setOperacion(String operacion) {
-        this.operacion = operacion;
+        this.operacion = CipherOperation.get(operacion);
     }
 
-    
-    
-    public CipherType getType() {
+    public CryptoType getType() {
         return type;
     }
 
-    public void setType(CipherType type) {
+    public void setType(CryptoType type) {
         this.type = type;
     }
 
@@ -69,8 +90,7 @@ public class CryptoDTO {
 
     @Override
     public String toString() {
-        return "CryptoDTO{" + "type=" + type + ", operacion=" + operacion + ", algoritmo=" + algoritmo + ", data=" + data + ", dataToVerified=" + dataToVerified + '}';
+        return "CryptoDTO{" + "type=" + type + ", operacion=" + operacion + ", algoritmo=" + algoritmo + ", data=" + Arrays.toString(data) + ", dataToVerified=" + Arrays.toString(dataToVerified) + '}';
     }
 
-    
 }

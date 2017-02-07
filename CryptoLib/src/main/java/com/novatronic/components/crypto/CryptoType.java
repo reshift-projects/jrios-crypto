@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.novatronic.components.support;
+package com.novatronic.components.crypto;
 
+import com.novatronic.components.crypto.operation.CipherOperation;
+import com.novatronic.components.exceptions.CryptoException;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,28 +15,32 @@ import java.util.Map;
  *
  * @author Ricardo
  */
-public enum CipherType {
-    ASYMETRIC(new String[]{"SHA1withRSA"}, new String[]{"V","F"}), 
-    SYMETRIC(new String[]{"DES", "AES"}, new String[]{"E","D"});
+public enum CryptoType {
+    ASYMETRIC(new String[]{"SHA1withRSA", "SHA512withRSA", "MD2withRSA", "RIPEMD128withRSA", "RIPEMD256withRSA"}, new CipherOperation[]{CipherOperation.VERIFY, CipherOperation.SIGN}),
+    SYMETRIC(new String[]{"DES", "AES"}, new CipherOperation[]{CipherOperation.ENCRYPT, CipherOperation.DECRYPT});
 
     private final Map<String, String> algoritmos = new LinkedHashMap<String, String>();
-    private final Map<String, String> operaciones = new LinkedHashMap<String, String>();
+    private final Map<CipherOperation, CipherOperation> operaciones = new EnumMap<CipherOperation, CipherOperation>(CipherOperation.class);
 
-    CipherType(String[] algoritmos, String[] operaciones) {
+    CryptoType(String[] algoritmos, CipherOperation[] operaciones) {
         for (String algoritmo : algoritmos) {
             this.algoritmos.put(algoritmo, algoritmo);
         }
-        for (String operacion : operaciones) {
+        for (CipherOperation operacion : operaciones) {
             this.operaciones.put(operacion, operacion);
         }
     }
 
-    public boolean hasAnAlgoritm(String algoritmoABuscar) {
-        return algoritmos.containsKey(algoritmoABuscar);
+    public void validarAlgoritmo(String algoritmoABuscar) {
+        if (!algoritmos.containsKey(algoritmoABuscar)) {
+            throw new CryptoException(CryptoException.ALGORITMO_INVALIDO, "No se permite este algoritmo para [" + this + "]");
+        }
     }
 
-    public boolean hasAnOperation(String operacionABuscar) {
-        return operaciones.containsKey(operacionABuscar);
+    public void validarOperacion(CipherOperation operacionABuscar) {
+        if (!operaciones.containsKey(operacionABuscar)) {
+            throw new CryptoException(CryptoException.OPERACION_INVALIDO, "No se permite esta operacion para [" + this + "]");
+        }
     }
 
 }

@@ -5,7 +5,8 @@
  */
 package com.novatronic.components.crypto;
 
-import com.novatronic.components.support.CipherType;
+import com.novatronic.components.crypto.operation.OperationFactory;
+import com.novatronic.components.exceptions.CryptoException;
 import com.novatronic.components.support.ResourceHelper;
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -18,67 +19,64 @@ public class CryptoService {
 
     private static final Logger LOGGER = Logger.getLogger(CryptoService.class);
     private static final String CONFIG = "CipherOptions_Bytes.properties";
+    private final Properties configuration;
+
+    public CryptoService() {
+        configuration = ResourceHelper.findAsProperties(CONFIG);
+    }
+
+    public CryptoService(Properties configuration) {
+        this.configuration = configuration;
+    }
 
     public CryptoResponseDTO process(CryptoDTO request) {
         Crypto crypto;
         CryptoResponseDTO response;
+        Properties config;
 
-        Properties config = ResourceHelper.findAsProperties(CONFIG);
-
-        CipherType type = request.getType();
-
-        if (!type.hasAnAlgoritm(request.getAlgoritmo())) {
-            throw new RuntimeException("No se permite este algoritmo para [" + type + "]");
-        }
-
-        if (!type.hasAnOperation(request.getOperacion())) {
-            throw new RuntimeException("No se permite este algoritmo para [" + type + "]");
-        }
-
-        response = new CryptoResponseDTO(request);
         try {
 
-            switch (request.getType()) {
-                case ASYMETRIC:
-                    config.put("encSignAlg", request.getAlgoritmo());
-                    config.put("verSignAlg", request.getAlgoritmo());
-                    break;
-                case SYMETRIC:
-                    config.put("encAlg", request.getAlgoritmo());
-                    config.put("decAlg", request.getAlgoritmo());
-                    break;
-            }
+            request.validar();
+
+            config = getConfiguration(request);
 
             crypto = CryptoFactory.getInstance(config);
 
-            byte[] dataResponse = null;
-            String codigoRespuesta = "99";
+            response = OperationFactory.executeOperation(crypto, request);
 
-            if (request.getOperacion().equals("E")) {
-                dataResponse = (byte[]) crypto.encrypt(request.getData());
-                codigoRespuesta = "00";
-            } else if (request.getOperacion().equals("D")) {
-                dataResponse = (byte[]) crypto.decrypt(request.getData());
-                codigoRespuesta = "00";
-            } else if (request.getOperacion().equals("F")) {
-                dataResponse = (byte[]) crypto.sign(request.getData());
-                codigoRespuesta = "00";
-            } else if (request.getOperacion().equals("V")) {
-                codigoRespuesta = crypto.verify(request.getData(), request.getDataToVerified()) ? "00" : "99";
-            }
+            LOGGER.info("Respuesta obtenida [" + response.getCodigoRespuesta() + "]");
 
-            response.setDataRespuesta(dataResponse);
-            response.setCodigoRespuesta(codigoRespuesta);
-            response.setDescripcionRespuesta("-");
-            LOGGER.info("Respuesta satisfactoria [" + response.getCodigoRespuesta() + "]");
-
-        } catch (Exception e) {
-            response.setCodigoRespuesta("99");
+        } catch (CryptoException e) {
+            response = new CryptoResponseDTO();
+            response.setCodigoRespuesta(e.getCodigo());
             response.setDescripcionRespuesta(e.getMessage());
-            LOGGER.error("Respuesta con error [" + response.getCodigoRespuesta() + "]", e);
+            LOGGER.error("Respuesta con error identificado [" + response.getCodigoRespuesta() + "=" + response.getDescripcionRespuesta() + "]", e);
+        } catch (Exception e) {
+            response = new CryptoResponseDTO();
+            response.setCodigoRespuesta(CryptoException.GENERAL);
+            response.setDescripcionRespuesta("Error en el sistema");
+            LOGGER.error("Respuesta con error [" + response.getCodigoRespuesta() + "=" + response.getDescripcionRespuesta() + "]", e);
         }
 
         return response;
+    }
+
+    private Properties getConfiguration(CryptoDTO request) {
+        Properties config = new Properties();
+        config.putAll(configuration);
+
+        switch (request.getType()) {
+            case ASYMETRIC:
+                config.put("encSignAlg", request.getAlgoritmo());
+                config.put("verSignAlg", request.getAlgoritmo());
+                break;
+            case SYMETRIC:
+                config.put("encAlg", request.getAlgoritmo());
+                config.put("decAlg", request.getAlgoritmo());
+                break;
+        }
+
+        return config;
     }
 
 }

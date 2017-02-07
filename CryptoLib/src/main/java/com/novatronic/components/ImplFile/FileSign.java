@@ -37,8 +37,7 @@ public class FileSign {
     }
 
     public byte[] sign(InputStream fis, PrivateKey prvKey) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
-        Signature sig = Signature.getInstance(algorithm);
-        sig.initSign(prvKey);
+        Signature sig = cargarAlgoritmoFirma(algorithm, prvKey);
         byte[] dataBytes = new byte[1024];
         int nread = fis.read(dataBytes);
         while (nread > 0) {
@@ -53,7 +52,7 @@ public class FileSign {
         ByteArrayInputStream fis = new ByteArrayInputStream(data);
         return verify(fis, pubKey, sigbytes);
     }
-    
+
     public boolean verify(String datafile, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         FileInputStream fis = new FileInputStream(datafile);
         FileInputStream fisOut = new FileInputStream(sigbytes);
@@ -64,22 +63,32 @@ public class FileSign {
         fisign.close();
         return verify(fis, pubKey, sigBytes);
     }
-    
-    public boolean verify(InputStream fis, PublicKey pubKey, byte[]  sigBytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
+
+    public boolean verify(InputStream fis, PublicKey pubKey, byte[] sigBytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         log.debug("Verificando firma");
-        Signature sig = Signature.getInstance(algorithm);
-        sig.initVerify(pubKey);
+        Signature sig = cargarAlgoritmoFirma(algorithm, pubKey);
+        
         byte[] dataBytes = new byte[1024];
         int nread = fis.read(dataBytes);
         while (nread > 0) {
             sig.update(dataBytes, 0, nread);
             nread = fis.read(dataBytes);
-        };
+        }
         fis.close();
 
         return sig.verify(sigBytes);
     }
-    
-    
+
+    private Signature cargarAlgoritmoFirma(String algoritmo, PublicKey pubKey) throws NoSuchAlgorithmException, InvalidKeyException {
+        Signature sig = Signature.getInstance(algoritmo);
+        sig.initVerify(pubKey);
+        return sig;
+    }
+
+    private Signature cargarAlgoritmoFirma(String algoritmo, PrivateKey privKey) throws NoSuchAlgorithmException, InvalidKeyException {
+        Signature sig = Signature.getInstance(algoritmo);
+        sig.initSign(privKey);
+        return sig;
+    }
 
 }
