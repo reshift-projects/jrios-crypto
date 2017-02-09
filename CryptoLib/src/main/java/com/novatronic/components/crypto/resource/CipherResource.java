@@ -1,4 +1,4 @@
-package com.novatronic.components.crypto.manager;
+package com.novatronic.components.crypto.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,14 +20,14 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CipherManager {
+public class CipherResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CipherManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CipherResource.class);
 
     private final Cipher cipher;
     private final SecretKeySpec keySpec;
 
-    public CipherManager(String algorithm, Key secKey) throws GeneralSecurityException {
+    public CipherResource(String algorithm, Key secKey) throws GeneralSecurityException {
         // instancia cipher
         this.keySpec = (SecretKeySpec) secKey;
 

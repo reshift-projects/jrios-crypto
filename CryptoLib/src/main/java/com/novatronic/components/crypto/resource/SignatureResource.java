@@ -1,4 +1,4 @@
-package com.novatronic.components.crypto.manager;
+package com.novatronic.components.crypto.resource;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,13 +14,13 @@ import java.security.SignatureException;
 
 import org.apache.log4j.Logger;
 
-public class SignatureManager {
+public class SignatureResource {
 
-    private static final Logger log = Logger.getLogger(SignatureManager.class);
+    private static final Logger log = Logger.getLogger(SignatureResource.class);
 
     private final Signature signature;
 
-    public SignatureManager(String algorithm) throws NoSuchAlgorithmException {
+    public SignatureResource(String algorithm) throws NoSuchAlgorithmException {
         this.signature = Signature.getInstance(algorithm);
     }
 

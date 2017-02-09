@@ -14,9 +14,9 @@ import com.novatronic.components.exceptions.CryptoException;
  *
  * @author Ricardo
  */
-public class OperationFactory {
+public class OperationExecutor {
 
-    public static Response executeOperation(Crypto crypto, Request request) {
+    public static Response execute(Crypto crypto, Request request) {
         BasicOperation operation = getOperation(request.getOperacion());
         return operation.execute(crypto, request);
     }

@@ -25,7 +25,7 @@ import org.junit.rules.ExpectedException;
 public class CryptoServiceTest {
 
     private static final Logger LOGGER = Logger.getLogger(CryptoServiceTest.class);
-    CryptoService instance;
+    CriptoController instance;
 
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -42,7 +42,7 @@ public class CryptoServiceTest {
 
     @Before
     public void setUp() {
-        instance = new CryptoService(ResourceHelper.findAsProperties("CipherService.properties"));
+        instance = new CriptoController(ResourceHelper.findAsProperties("CipherService.properties"));
     }
 
     @After
@@ -50,7 +50,7 @@ public class CryptoServiceTest {
     }
 
     /**
-     * Test of process method, of class CryptoService.
+     * Test of process method, of class CriptoController.
      */
     @Test
     public void testProcessEncription() {
@@ -183,7 +183,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.SYMETRIC, "E", "AES", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
         result = instance.process(request);
 
@@ -198,7 +198,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
         result = instance.process(request);
 
@@ -213,7 +213,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
         result = instance.process(request);
 
@@ -228,7 +228,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalid.properties"));
 
         result = instance.process(request);
 
@@ -243,7 +243,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.SYMETRIC, "D", "AES", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
         result = instance.process(request);
 
@@ -258,7 +258,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.ASYMETRIC, "F", "SHA1withRSA", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
         result = instance.process(request);
 
@@ -273,7 +273,7 @@ public class CryptoServiceTest {
         Response result;
         request = new Request(CryptoType.ASYMETRIC, "V", "SHA1withRSA", "A".getBytes());
 
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigInvalidKey.properties"));
 
         result = instance.process(request);
 
@@ -356,7 +356,7 @@ public class CryptoServiceTest {
         dataACifrar = "Hola Mundo".getBytes();
 
         request = new Request(CryptoType.ASYMETRIC, "V", "RIPEMD256withRSA", dataACifrar);
-        CryptoService instance = new CryptoService(ResourceHelper.findAsProperties("ConfigNoExisteImpl.properties"));
+        CriptoController instance = new CriptoController(ResourceHelper.findAsProperties("ConfigNoExisteImpl.properties"));
         result = instance.process(request);
 
         LOGGER.debug("resultado=" + result);

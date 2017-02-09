@@ -1,8 +1,8 @@
 package com.novatronic.components.ImplFile;
 
-import com.novatronic.components.crypto.manager.SignatureManager;
-import com.novatronic.components.crypto.manager.CipherManager;
-import com.novatronic.components.crypto.key.KeyManager;
+import com.novatronic.components.crypto.resource.SignatureResource;
+import com.novatronic.components.crypto.resource.CipherResource;
+import com.novatronic.components.crypto.resource.KeyResource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Key;
@@ -54,16 +54,16 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
         try {
             LOGGER.debug("Iniciando verificar firma de archivo");
 
-            SignatureManager signer;
+            SignatureResource signer;
             Key publicKey;
             //verificar datos
             validarDatos(VER_PROPS);
             //Leer llave publica de archivo
-            publicKey = KeyManager.getPublicKey(prop.getProperty("verSignKeyFile"),
+            publicKey = KeyResource.getPublicKey(prop.getProperty("verSignKeyFile"),
                     prop.getProperty("verSignKeyAlias"),
                     prop.getProperty("verKeystoreLoadPassword"));
 
-            signer = new SignatureManager(prop.getProperty("verSignAlg"));
+            signer = new SignatureResource(prop.getProperty("verSignAlg"));
             result = signer.verify(prop.getProperty("verFileIn"), (PublicKey) publicKey, prop.getProperty("verSignFile"));
         } catch (Exception e) {
             throw new CryptoException("Error al intentar verificar firma de archivo", e);
@@ -76,17 +76,17 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
         try {
             LOGGER.debug("Inciando descifrar archivo segun properties");
             Key symmetricKey;
-            CipherManager crypt;
+            CipherResource crypt;
 
             //verificar datos
             validarDatos(DEC_PROPS);
 
             //leer llave simetrica de archivo
             algoritm = prop.getProperty("decAlg");
-            symmetricKey = KeyManager.getSymmetricKey(prop.getProperty("decKeyFile"), algoritm);//getSymmetricKey(prop.getProperty("decKeyFile"));
+            symmetricKey = KeyResource.getSymmetricKey(prop.getProperty("decKeyFile"), algoritm);//getSymmetricKey(prop.getProperty("decKeyFile"));
 
             //descifrar file
-            crypt = new CipherManager(algoritm, symmetricKey);
+            crypt = new CipherResource(algoritm, symmetricKey);
             crypt.decrypt(new File(prop.getProperty("decFileIn")), new File(prop.getProperty("decFileOut")));
         } catch (Exception ex) {
             throw new CryptoException("Error al intentar descifrar archivo", ex);
@@ -99,18 +99,18 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
             LOGGER.debug("Iniciando cifrado de archivo segun properties");
             byte[] signOut;
             FileOutputStream fos;
-            SignatureManager signer;
-            CipherManager crypt;
+            SignatureResource signer;
+            CipherResource crypt;
             Key privateKey;
             Key symmetricKey;
 
             //verificar datos
             validarDatos(ENC_PROPS);
 
-            signer = new SignatureManager(prop.getProperty("encSignAlg"));
+            signer = new SignatureResource(prop.getProperty("encSignAlg"));
 
             //Leer llave privada de archivo
-            privateKey = KeyManager.getPrivateKey(prop.getProperty("encSignKeyFile"),
+            privateKey = KeyResource.getPrivateKey(prop.getProperty("encSignKeyFile"),
                     prop.getProperty("encSignKeyAlias"),
                     prop.getProperty("encKeystoreLoadPassword"),
                     prop.getProperty("encPrivatePassword"));
@@ -135,26 +135,26 @@ public class FileCipher extends BasicCipher<Object, Boolean> {
             byte[] signOut;
             FileOutputStream fos;
             //FileSign signer;
-            CipherManager crypt;
+            CipherResource crypt;
             Key privateKey;
             Key symmetricKey;
 
             //verificar datos
             validarDatos(ENC_PROPS);
 
-            //signer = new SignatureManager(prop.getProperty("encSignAlg"));
+            //signer = new SignatureResource(prop.getProperty("encSignAlg"));
             //Leer llave privada de archivo		
-            privateKey = KeyManager.getPrivateKey(prop.getProperty("encSignKeyFile"),
+            privateKey = KeyResource.getPrivateKey(prop.getProperty("encSignKeyFile"),
                     prop.getProperty("encSignKeyAlias"),
                     prop.getProperty("encKeystoreLoadPassword"),
                     prop.getProperty("encPrivatePassword"));
 
             //leer llave simetrica de archivo
             algoritm = prop.getProperty("encAlg");
-            symmetricKey = KeyManager.getSymmetricKey(prop.getProperty("encKeyFile"), algoritm);//getSymmetricKey(prop.getProperty("encKeyFile"));
+            symmetricKey = KeyResource.getSymmetricKey(prop.getProperty("encKeyFile"), algoritm);//getSymmetricKey(prop.getProperty("encKeyFile"));
 
             //cifrar con filein, fileout, algoritmo, llave		
-            crypt = new CipherManager(algoritm, symmetricKey);
+            crypt = new CipherResource(algoritm, symmetricKey);
             crypt.encrypt(new File(prop.getProperty("encFileIn")), new File(prop.getProperty("encFileOut")));
 
         } catch (Exception ex) {

@@ -5,9 +5,10 @@
  */
 package com.novatronic.components.crypto;
 
+import com.novatronic.components.ImplFile.ByteCripto;
 import com.novatronic.components.crypto.message.Request;
 import com.novatronic.components.crypto.message.Response;
-import com.novatronic.components.crypto.operation.OperationFactory;
+import com.novatronic.components.crypto.operation.OperationExecutor;
 import com.novatronic.components.exceptions.CryptoException;
 import com.novatronic.components.support.ResourceHelper;
 import java.util.Properties;
@@ -17,17 +18,17 @@ import org.apache.log4j.Logger;
  *
  * @author Ricardo
  */
-public class CryptoService {
+public class CriptoController {
 
-    private static final Logger LOGGER = Logger.getLogger(CryptoService.class);
+    private static final Logger LOGGER = Logger.getLogger(CriptoController.class);
     private static final String CONFIG = "CipherOptions_Bytes.properties";
     private final Properties configuration;
 
-    public CryptoService() {
+    public CriptoController() {
         configuration = ResourceHelper.findAsProperties(CONFIG);
     }
 
-    public CryptoService(Properties configuration) {
+    public CriptoController(Properties configuration) {
         this.configuration = configuration;
     }
 
@@ -44,7 +45,7 @@ public class CryptoService {
 
             crypto = CryptoFactory.getInstance(config);
 
-            response = OperationFactory.executeOperation(crypto, request);
+            response = OperationExecutor.execute(crypto, request);
 
             LOGGER.info("Respuesta obtenida [" + response.getCodigoRespuesta() + "]");
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.novatronic.components.crypto.key;
+package com.novatronic.components.crypto.resource;
 
 import com.novatronic.components.exceptions.CryptoException;
 import java.io.File;
@@ -20,11 +20,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ricardo
  */
-public final class KeyManager {
+public final class KeyResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KeyManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyResource.class);
 
-    private KeyManager() {
+    private KeyResource() {
     }
 
     public static Key getPrivateKey(String privateKeyFile, String alias, String keystoreLoadPassword, String privatePassword) {
