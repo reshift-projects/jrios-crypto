@@ -26,11 +26,17 @@
     </build>
 	
     <modules>
+        <!-- Cripto Core-->
         <module>cripto-parent</module>
         <module>cripto-exception</module>
         <module>cripto-model</module>
         <module>cripto-resource</module>
         <module>cripto-controller</module>
+        
+        <!-- Cripto Api-->
+        <module>cripto-formatter</module>
+        <module>cripto-api</module>
+        
     </modules>
  
 </project>
