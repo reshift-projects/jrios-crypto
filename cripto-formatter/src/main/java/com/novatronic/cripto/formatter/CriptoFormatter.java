@@ -5,11 +5,16 @@
  */
 package com.novatronic.cripto.formatter;
 
+import com.novatronic.cripto.model.Request;
+import com.novatronic.cripto.model.Response;
+
 /**
  *
  * @author Ricardo
  */
-public interface CriptoFormatter<S, T> {
+public interface CriptoFormatter<T> {
 
-    T format(S dataToFormat);
+    Request unmarshall(T dataToFormat);
+
+    T marshall(Response dataToFormat);
 }

@@ -11,7 +11,7 @@ import com.novatronic.cripto.model.Request;
  *
  * @author Ricardo
  */
-public class ByteToObject implements CriptoFormatter<byte[], Request> {
+public class ByteToObject {
 
     /**
      *
@@ -19,7 +19,6 @@ public class ByteToObject implements CriptoFormatter<byte[], Request> {
      * mediante una estructura fija
      * @return Objeto de requerimiento
      */
-    @Override
     public Request format(byte[] requestToFormat) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

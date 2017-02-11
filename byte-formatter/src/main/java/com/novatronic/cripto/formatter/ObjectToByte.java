@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Ricardo
  */
-public class ObjectToByte implements CriptoFormatter<Response, byte[]> {
+public class ObjectToByte {
 
     private static final String CHARSET = "UTF-8";
     private static final int MIN_LENGTH = 52;
@@ -25,7 +25,6 @@ public class ObjectToByte implements CriptoFormatter<Response, byte[]> {
      * requerimiento. Codigo Respuesta = 2 bytes Descripcion Respuesta = 50
      * bytes Data Respuesta = n bytes
      */
-    @Override
     public byte[] format(Response response) {
         try {
             byte[] byteResponseCode = response.getCodigoRespuesta().getBytes(CHARSET);

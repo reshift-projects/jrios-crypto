@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ricardo
  */
-public class ByteFormatter implements CriptoFormatter<Object, Object> {
+public class ByteFormatter implements CriptoFormatter<byte[]> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteFormatter.class);
     private final ByteToObject bytesToRequest;
@@ -26,19 +26,12 @@ public class ByteFormatter implements CriptoFormatter<Object, Object> {
     }
 
     @Override
-    public Object format(Object data) {
-        if (data instanceof Response) {
-            return responseToByte((Response) data);
-        } else {
-            return byteToRequest((byte[]) data);
-        }
-    }
-
-    private Request byteToRequest(byte[] bytes) {
+    public Request unmarshall(byte[] bytes) {
         return bytesToRequest.format(bytes);
     }
 
-    private byte[] responseToByte(Response response) {
+    @Override
+    public byte[] marshall(Response response) {
         return responseToBytes.format(response);
     }
 
