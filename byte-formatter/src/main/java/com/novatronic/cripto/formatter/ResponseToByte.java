@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Ricardo
  */
-public class ObjectToByte {
+public class ResponseToByte {
 
     private static final String CHARSET = "UTF-8";
     private static final int MIN_LENGTH = 52;
@@ -27,22 +27,17 @@ public class ObjectToByte {
      */
     public byte[] format(Response response) {
         try {
+
             byte[] byteResponseCode = response.getCodigoRespuesta().getBytes(CHARSET);
             byte[] byteResponseDesc = response.getDescripcionRespuesta().getBytes(CHARSET);
             byte[] byteDataResponse = response.getDataRespuesta();
-            byte[] bytes = new byte[MIN_LENGTH + byteDataResponse.length];
 
-            int currentPos = 0;
-            System.arraycopy(byteResponseCode, 0, bytes, currentPos, byteResponseCode.length);
-            currentPos += byteResponseCode.length;
+            ByteBuilder builder = new ByteBuilder(MIN_LENGTH + byteDataResponse.length)
+                    .add(byteResponseCode)
+                    .add(byteResponseDesc)
+                    .add(byteDataResponse);
 
-            System.arraycopy(byteResponseDesc, 0, bytes, currentPos, byteResponseDesc.length);
-            currentPos += byteResponseDesc.length;
-
-            System.arraycopy(byteResponseDesc, 0, bytes, currentPos, byteDataResponse.length);
-            currentPos += byteDataResponse.length;
-
-            return bytes;
+            return builder.getContent();
         } catch (UnsupportedEncodingException ex) {
             throw new CryptoException(CryptoException.GENERAL, "Error al interpretar mensaje de respuesta", ex);
         }

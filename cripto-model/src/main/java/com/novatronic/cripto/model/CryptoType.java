@@ -15,13 +15,15 @@ import java.util.Map;
  * @author Ricardo
  */
 public enum CryptoType {
-    ASYMETRIC(new String[]{"SHA1withRSA", "SHA512withRSA", "MD2withRSA", "RIPEMD128withRSA", "RIPEMD256withRSA"}, new CipherOperation[]{CipherOperation.VERIFY, CipherOperation.SIGN}),
-    SYMETRIC(new String[]{"DES", "AES"}, new CipherOperation[]{CipherOperation.ENCRYPT, CipherOperation.DECRYPT});
+    ASYMETRIC("A", new String[]{"SHA1withRSA", "SHA512withRSA", "MD2withRSA", "RIPEMD128withRSA", "RIPEMD256withRSA"}, new CipherOperation[]{CipherOperation.VERIFY, CipherOperation.SIGN}),
+    SYMETRIC("S", new String[]{"DES", "AES"}, new CipherOperation[]{CipherOperation.ENCRYPT, CipherOperation.DECRYPT});
 
+    private final String codigo;
     private final Map<String, String> algoritmos = new LinkedHashMap<String, String>();
     private final Map<CipherOperation, CipherOperation> operaciones = new EnumMap<CipherOperation, CipherOperation>(CipherOperation.class);
 
-    CryptoType(String[] algoritmos, CipherOperation[] operaciones) {
+    CryptoType(String codigo, String[] algoritmos, CipherOperation[] operaciones) {
+        this.codigo = codigo;
         for (String algoritmo : algoritmos) {
             this.algoritmos.put(algoritmo, algoritmo);
         }
@@ -42,4 +44,16 @@ public enum CryptoType {
         }
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public static CryptoType get(String codigo) {
+        for (CryptoType type : CryptoType.values()) {
+            if (type.getCodigo().equalsIgnoreCase(codigo)) {
+                return type;
+            }
+        }
+        throw new CryptoException(CryptoException.TIPO_NO_EXISTE, "Tipo no existe [" + codigo + "]");
+    }
 }

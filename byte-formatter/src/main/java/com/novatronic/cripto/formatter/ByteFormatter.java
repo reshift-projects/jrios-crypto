@@ -17,12 +17,12 @@ import org.slf4j.LoggerFactory;
 public class ByteFormatter implements CriptoFormatter<byte[]> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteFormatter.class);
-    private final ByteToObject bytesToRequest;
-    private final ObjectToByte responseToBytes;
+    private final ByteToRequest bytesToRequest;
+    private final ResponseToByte responseToBytes;
 
     public ByteFormatter() {
-        bytesToRequest = new ByteToObject();
-        responseToBytes = new ObjectToByte();
+        bytesToRequest = new ByteToRequest();
+        responseToBytes = new ResponseToByte();
     }
 
     @Override

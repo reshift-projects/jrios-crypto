@@ -13,6 +13,7 @@ public class CryptoException extends RuntimeException {
     public static final String FIRMAR = "10";
     public static final String VERIFICAR = "11";
     public static final String OPERACION_NO_EXISTE = "12";
+    public static final String TIPO_NO_EXISTE = "13";
 
     public static final String GENERAL = "99";
 
