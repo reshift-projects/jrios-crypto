@@ -14,11 +14,20 @@
 
     <fileSets>
         <fileSet>
+            <directory>src/assembly/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
             <directory>src/assembly</directory>
             <outputDirectory>/</outputDirectory>
             <lineEnding>keep</lineEnding>
             <fileMode>0755</fileMode>
             <includes>
+                <!--<include>**/*.sh</include>-->
                 <include>**/*.bat</include>
             </includes>
         </fileSet>

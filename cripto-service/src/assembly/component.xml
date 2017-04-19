@@ -1,7 +1,7 @@
 <component>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/libs</outputDirectory>
         </dependencySet>
     </dependencySets>
 </component>
