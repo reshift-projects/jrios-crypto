@@ -17,12 +17,6 @@ import java.io.UnsupportedEncodingException;
  */
 public class ByteToRequest {
 
-    private static final String CHARSET = "UTF-8";
-    private static final int TYPE_LENGTH = 1;
-    private static final int OPERATION_LENGTH = 1;
-    private static final int ALGORITMO_LENGTH = 10;
-    private static final int DATA_LENGTH = 3;
-
     /**
      *
      * @param requestToFormat Arreglo de bytes donde se envia el requerimiento
@@ -32,25 +26,23 @@ public class ByteToRequest {
     public Request format(byte[] requestToFormat) {
         try {
             ByteReader reader = new ByteReader(requestToFormat);
-            String type = reader.readStringUntil(TYPE_LENGTH, CHARSET);
-            String operation = reader.readStringUntil(OPERATION_LENGTH, CHARSET);
-            String algoritmo = reader.readStringUntil(ALGORITMO_LENGTH, CHARSET);
+            String type = reader.readType();
+            String operation = reader.readOperation();
+            String algoritmo = reader.readAlgorimo().trim();
 
             CipherOperation chiperOperation = CipherOperation.get(operation);
             Request request;
             if (chiperOperation == CipherOperation.VERIFY) {
 
-                int dataLength = reader.readIntUntil(DATA_LENGTH, CHARSET);
-                byte[] data = reader.readUntil(dataLength);
+                byte[] data = reader.readData();
 
-                int dataToVerifyLength = reader.readIntUntil(DATA_LENGTH, CHARSET);
-                byte[] dataToVerify = reader.readUntil(dataToVerifyLength);
+                byte[] dataToVerify = reader.readData();
 
                 request = new Request(CryptoType.get(type), chiperOperation, algoritmo, data);
                 request.setDataToVerified(dataToVerify);
             } else {
-                
-                byte[] data = reader.readUntil();
+
+                byte[] data = reader.readData();
                 request = new Request(CryptoType.get(type), chiperOperation, algoritmo, data);
             }
             return request;
