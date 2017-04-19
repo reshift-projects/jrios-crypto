@@ -38,6 +38,10 @@
         <module>cripto-api</module>
         <module>byte-formatter</module>
 
+        <!-- Cripto Service-->
+        <module>cripto-service</module>
+
+        <!-- Cliente Socket-->
         <module>socket-client</module>
         
     </modules>
