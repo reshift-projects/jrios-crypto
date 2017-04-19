@@ -11,3 +11,7 @@
 /cripto-controller/target/
 /cripto-formatter/target/
 /byte-formatter/target/
+
+**/target/
+**/*.iml
+**/.idea

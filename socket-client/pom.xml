@@ -1,11 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-	
-    <groupId>com.novatronic.cripto</groupId>
-    <artifactId>cripto</artifactId>
+    <modelVersion>4.0.0</modelVersion>	
+    <parent>
+        <groupId>com.novatronic.cripto</groupId>
+        <artifactId>cripto-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../cripto-parent/pom.xml</relativePath>
+    </parent>
+    <groupId>com.novatronic.mock</groupId>
+    <artifactId>socket-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
 
     <properties>
@@ -24,22 +28,13 @@
             </plugin>
         </plugins>
     </build>
-	
-    <modules>
-        <!-- Cripto Core-->
-        <module>cripto-parent</module>
-        <module>cripto-exception</module>
-        <module>cripto-model</module>
-        <module>cripto-resource</module>
-        <module>cripto-controller</module>
-        
-        <!-- Cripto Api-->
-        <module>cripto-formatter</module>
-        <module>cripto-api</module>
-        <module>byte-formatter</module>
 
-        <module>socket-client</module>
-        
-    </modules>
- 
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+    </dependencies>
 </project>
