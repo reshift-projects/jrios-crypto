@@ -1,0 +1,10 @@
+<component>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>commons-io:commons-io</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+</component>
