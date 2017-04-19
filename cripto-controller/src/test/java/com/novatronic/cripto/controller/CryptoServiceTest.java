@@ -5,28 +5,25 @@
  */
 package com.novatronic.cripto.controller;
 
-import com.novatronic.cripto.controller.CriptoController;
 import com.novatronic.cripto.model.CryptoType;
 import com.novatronic.cripto.model.Request;
 import com.novatronic.cripto.model.Response;
 import com.novatronic.cripto.resource.ResourceHelper;
 import org.apache.log4j.Logger;
-
 import org.junit.*;
-
-import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
- *
  * @author Ricardo
  */
 public class CryptoServiceTest {
 
     private static final Logger LOGGER = Logger.getLogger(CryptoServiceTest.class);
-    CriptoController instance;
-
     public ExpectedException expectedException = ExpectedException.none();
+    CriptoController instance;
 
     public CryptoServiceTest() {
     }
@@ -48,7 +45,7 @@ public class CryptoServiceTest {
     public void tearDown() {
     }
 
-    @Ignore
+
     /**
      * Test of process method, of class CriptoController.
      */
@@ -65,7 +62,6 @@ public class CryptoServiceTest {
         assertTrue(result.getCodigoRespuesta().equals("00"));
     }
 
-    @Ignore
     @Test
     public void testProcessDecription() {
         System.out.println("process");
@@ -346,7 +342,7 @@ public class CryptoServiceTest {
         assertTrue(result.getCodigoRespuesta().equals("11"));
         assertTrue(result.getDescripcionRespuesta().equalsIgnoreCase("Error al verificar la firma del mensaje"));
     }
-    
+
     @Test
     public void testErrorSistema() {
         System.out.println("process");

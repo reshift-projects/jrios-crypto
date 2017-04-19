@@ -9,12 +9,6 @@
     </parent>
     <groupId>com.novatronic.mock</groupId>
     <artifactId>socket-client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
 
     <build>
@@ -22,8 +16,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>

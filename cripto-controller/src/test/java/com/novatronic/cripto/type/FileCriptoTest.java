@@ -1,22 +1,21 @@
 package com.novatronic.cripto.type;
 
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-
+import com.novatronic.cripto.controller.Cripto;
 import com.novatronic.cripto.controller.CriptoFactory;
 import com.novatronic.cripto.resource.ResourceHelper;
-import static org.junit.Assert.*;
-import com.novatronic.cripto.controller.Cripto;
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Properties;
+
+import static org.junit.Assert.fail;
 
 public class FileCriptoTest {
 
     private static final Logger log = Logger.getLogger(FileCriptoTest.class);
 
-    @Ignore
+
     @Test
     public void encrypt() {
         try {
@@ -36,17 +35,17 @@ public class FileCriptoTest {
 
     @Test
     public void encryptDES() {
-            log.debug("==========================ENCRYPT TEST=========================");
-            Properties prop;
-            prop = ResourceHelper.findAsProperties("CipherOptions_DES.properties");
+        log.debug("==========================ENCRYPT TEST=========================");
+        Properties prop;
+        prop = ResourceHelper.findAsProperties("CipherOptions_DES.properties");
 
-            Cripto crypt = CriptoFactory.getInstance(prop);
+        Cripto crypt = CriptoFactory.getInstance(prop);
 
-            crypt.encrypt(null);
- 
+        crypt.encrypt(null);
+
     }
 
-    @Ignore
+
     @Test
     public void decrypt() {
         try {
@@ -95,7 +94,7 @@ public class FileCriptoTest {
 
             result = (Boolean) crypt.sign(null);
 
-            result = crypt.verify(null,null);
+            result = crypt.verify(null, null);
 
             log.info("Es valido?: " + result);
             Assert.assertEquals(true, result);

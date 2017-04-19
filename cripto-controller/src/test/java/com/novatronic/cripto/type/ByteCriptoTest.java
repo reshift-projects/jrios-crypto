@@ -1,26 +1,26 @@
 package com.novatronic.cripto.type;
 
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-
+import com.novatronic.cripto.controller.Cripto;
 import com.novatronic.cripto.controller.CriptoFactory;
 import com.novatronic.cripto.resource.ResourceHelper;
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static org.junit.Assert.*;
-import com.novatronic.cripto.controller.Cripto;
+import java.util.Properties;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 
 public class ByteCriptoTest {
 
     private static final Logger log = Logger.getLogger(ByteCriptoTest.class);
 
-    @Ignore
+
     @Test
     public void encryptBytes() {
         try {
@@ -58,7 +58,7 @@ public class ByteCriptoTest {
         assertArrayEquals(outExpected, out);
     }
 
-    @Ignore
+
     @Test
     public void decryptBytes() {
         try {
