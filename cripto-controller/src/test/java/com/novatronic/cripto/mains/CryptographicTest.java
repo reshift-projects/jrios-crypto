@@ -27,13 +27,13 @@ public class CryptographicTest {
 
         SecretKeySpec key = new SecretKeySpec(llaveSimetrica.getBytes(), algorithm);
 
-        FileSupport.writeFile(new File("D:/POCCrypt", algorithm + "Key"), key.getEncoded());
+        FileSupport.writeFile(new File("E:/Josue/POCCrypt", algorithm + "Key"), key.getEncoded());
         */
         
             SecretKey originalKey = generateKey();
-            File file = new File("D:/POCCrypt", ALGO.toLowerCase() + "Key");
+            File file = new File("E:/Josue/POCCrypt", ALGO.toLowerCase() + "Key");
             saveKey(originalKey, file);
-            /*SecretKey persistedKey = loadKey(new File("D:/POCCrypt", "aesKey"));
+            /*SecretKey persistedKey = loadKey(new File("E:/Josue/POCCrypt", "aesKey"));
             System.out.println("persistedKey" + new String(persistedKey.getEncoded()));*/
     }
     

@@ -21,14 +21,14 @@ public class SignOperation extends BasicOperation {
 
     @Override
     public Response customExecute(Cripto crypto, Request data) {
-        byte[] responseData;
         Response response = new Response();
 
-        responseData = (byte[]) crypto.sign(data.getData());
+        byte[] responseData = (byte[])crypto.sign(data.getData());
 
         response.setDataRespuesta(responseData);
+        response.setDescripcionRespuesta("Mensaje Firmado Satisfactoriamente");
 
-        LOGGER.debug("Mensaje Firmado Satisfactoriamente");
+        LOGGER.debug(response.getDescripcionRespuesta());
         return response;
     }
 

@@ -20,7 +20,7 @@ public class GenerateKeyTest {
         kgen.init(56);
         SecretKey key = kgen.generateKey();
         byte[] aesKey = key.getEncoded();
-        FileOutputStream out = new FileOutputStream("D:/POCCrypt/desKey");
+        FileOutputStream out = new FileOutputStream("E:/Josue/POCCrypt/desKey");
         out.write(aesKey);
         out.flush();
         out.close();

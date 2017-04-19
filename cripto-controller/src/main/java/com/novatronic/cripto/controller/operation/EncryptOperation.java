@@ -27,8 +27,9 @@ public class EncryptOperation extends BasicOperation {
         responseData = (byte[]) crypto.encrypt(data.getData());
 
         response.setDataRespuesta(responseData);
+        response.setDescripcionRespuesta("Mensaje Cifrado Satisfactoriamente");
 
-        LOGGER.debug("Mensaje Cifrado Satisfactoriamente");
+        LOGGER.debug(response.getDescripcionRespuesta());
         return response;
     }
 

@@ -27,8 +27,9 @@ public class DecryptOperation extends BasicOperation {
         responseData = (byte[]) crypto.decrypt(data.getData());
 
         response.setDataRespuesta(responseData);
+        response.setDescripcionRespuesta("Mensaje Descrifrado Satisfactoriamente");
 
-        LOGGER.debug("Mensaje Descrifrado Satisfactoriamente");
+        LOGGER.debug(response.getDescripcionRespuesta());
         return response;
     }
 

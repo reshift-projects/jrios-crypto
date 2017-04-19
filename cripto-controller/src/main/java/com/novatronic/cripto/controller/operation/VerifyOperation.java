@@ -26,7 +26,9 @@ public class VerifyOperation extends BasicOperation {
         if (verifyError) {
             throw new CryptoException(CryptoException.VERIFICAR, "Error al verificar");
         }
-        LOGGER.debug("Firma del Mensaje Verificado Satisfactoriamente");
+        Response response = new Response();
+        response.setDescripcionRespuesta("Firma del Mensaje Verificado Satisfactoriamente");
+        LOGGER.debug(response.getDescripcionRespuesta());
         return new Response();
     }
 

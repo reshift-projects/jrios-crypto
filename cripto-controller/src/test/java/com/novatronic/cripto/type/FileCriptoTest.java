@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.novatronic.cripto.controller.CriptoFactory;
@@ -15,6 +16,7 @@ public class FileCriptoTest {
 
     private static final Logger log = Logger.getLogger(FileCriptoTest.class);
 
+    @Ignore
     @Test
     public void encrypt() {
         try {
@@ -44,6 +46,7 @@ public class FileCriptoTest {
  
     }
 
+    @Ignore
     @Test
     public void decrypt() {
         try {
