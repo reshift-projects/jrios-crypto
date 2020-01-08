@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class MainClass {
   public static void main(String[] args) throws Exception {
     KeyGenerator keyGenerator = KeyGenerator.getInstance("Blowfish");
-    keyGenerator.init(128);
+    keyGenerator.init(96);
     Key blowfishKey = keyGenerator.generateKey();
 
     KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
