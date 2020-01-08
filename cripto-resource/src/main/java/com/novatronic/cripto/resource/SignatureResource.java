@@ -11,6 +11,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import javax.crypto.KeyGenerator;
 
 import org.apache.log4j.Logger;
 
@@ -54,6 +55,10 @@ public class SignatureResource {
     }
 
     public boolean verify(String datafile, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("Blowfish");
+        keyGenerator.init(96);
+        Key blowfishKey = keyGenerator.generateKey();
+        
         FileInputStream fis = new FileInputStream(datafile);
         FileInputStream fisOut = new FileInputStream(sigbytes);
         File sigFile = new File(sigbytes);
