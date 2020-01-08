@@ -12,6 +12,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import javax.crypto.KeyGenerator;
+import java.security.Key;
 
 import org.apache.log4j.Logger;
 
