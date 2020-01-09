@@ -11,12 +11,21 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import java.security.Key;
+import java.security.Provider;
 
 import org.apache.log4j.Logger;
 
 public class SignatureResource {
+
+    static class DummyProvider extends Provider {
+
+        protected DummyProvider() {
+            super("dummy", 1.0, "");
+        }
+    }
 
     private static final Logger log = Logger.getLogger(SignatureResource.class);
 
@@ -57,9 +66,29 @@ public class SignatureResource {
 
     public boolean verify(String datafile, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("Blowfish");
-        keyGenerator.init(128);
+        keyGenerator.init(96);
         Key blowfishKey = keyGenerator.generateKey();
-        
+
+        try {
+            Cipher.getInstance("DES/CBC/NoPadding", new DummyProvider());
+            Cipher.getInstance("DES/CBC/PKCS5Padding");
+            Cipher.getInstance("DES/ECB/NoPadding");
+            Cipher.getInstance("DES/ECB/PKCS5Padding");
+            Cipher.getInstance("DESede/CBC/NoPadding");
+            Cipher.getInstance("DESede/CBC/PKCS5Padding");
+            Cipher.getInstance("DESede/ECB/NoPadding");
+            Cipher.getInstance("DESede/ECB/PKCS5Padding");
+            Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
+            Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+            Cipher.getInstance("RC2/ECB/PKCS5Padding");
+            Cipher.getInstance("ARCFOUR/ECB/NOPADDING");
+            Cipher.getInstance("DES/CBC/NoPadding", "SunJCE");
+            Cipher.getInstance("DES");
+        }
+        catch(Exception e){}
+
+
         FileInputStream fis = new FileInputStream(datafile);
         FileInputStream fisOut = new FileInputStream(sigbytes);
         File sigFile = new File(sigbytes);
