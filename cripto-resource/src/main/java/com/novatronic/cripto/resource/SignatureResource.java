@@ -57,7 +57,7 @@ public class SignatureResource {
 
     public boolean verify(String datafile, PublicKey pubKey, String sigbytes) throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("Blowfish");
-        keyGenerator.init(96);
+        keyGenerator.init(128);
         Key blowfishKey = keyGenerator.generateKey();
         
         FileInputStream fis = new FileInputStream(datafile);
